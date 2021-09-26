@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "PT Sans", sans-serif;
+}
+.home,
+.products,
+.contact-us,
+.sign-up,
+.marketing {
+  display: flex;
+  height: 90vh;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 3rem;
+}

@@ -1,0 +1,13 @@
+POST http://localhost:4000/appointment
+Content-Type: application/json
+
+{
+    "name":"hello",
+    "email":"hello6@gmail.com",
+    "address":"88/1, princess gate, col-12",
+    "phone":"0771133572",
+    "category":"Heart",
+    "doctor":"Tom",
+    "time":"9.00p.m",
+    "date":"23 Sep 2021"
+}
