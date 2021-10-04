@@ -13,6 +13,7 @@ import { DialogActions, DialogContent ,Dialog, DialogTitle ,Grow ,useMediaQuery,
 
 export default function ManageBooking(){
     toast.configure();
+    const userId = sessionStorage.getItem('userId');
     const [selectedDate,setSelectedDate]= useState(new Date());
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -64,10 +65,13 @@ export default function ManageBooking(){
     }
 
     useEffect(() => {
-        axios.get('http://localhost:4000/appointment')
+        axios.get(`http://localhost:4000/user-appointment/${userId}`)
         .then(res=>{
             setValue(res.data)
-            setSingle(res.data[0])
+            if(Object.keys(res.data).length === 0)
+                setSingle(res.data)
+            else
+                setSingle(res.data[0])
         }).catch(err=>{console.log(err)})
     }, []);
 
@@ -75,7 +79,7 @@ export default function ManageBooking(){
         axios.delete(`http://localhost:4000/appointment/${id}`).then(res=>{
             if(res.data!==null){
                 setValue(appointments.filter((val)=>{
-                    return val._id != id;
+                    return val._id !== id;
                 }))
                 toast.success("Appointment has been cancelled",{
                         position: "top-center",
@@ -89,8 +93,9 @@ export default function ManageBooking(){
             }
         }).catch(err=>{console.log(err)})
     }
+
     const updateData=(id)=>{
-        if(values.name!='' && values.address!='' && values.email!='' && values.date!='Invalid date' && values.time!=''){
+        if(values.name!=='' && values.address!=='' && values.email!=='' && values.date!=='Invalid date' && values.time!==''){
             axios.put(`http://localhost:4000/appointment/${id}`,values).then(res=>{
                 setSingle(res.data);
                 setValue(appointments.filter((val)=>{
@@ -149,6 +154,7 @@ export default function ManageBooking(){
     const categoryController=(id)=>{
         return values.category===id;
     }
+
     return(
         <>
         <Navbar/>
@@ -162,7 +168,7 @@ export default function ManageBooking(){
                         <div className='input-box'>
                         <label className='details' htmlFor='userid'>Booking ID</label>
                         <div className='input-group'>
-                        <input type='text' id='userid' disabled name='phoneNumber' value={singleAppointment._id} placeholder='Enter Your User ID' required/>
+                        <input type='text' id='userid' disabled name='phoneNumber' value={singleAppointment.bookId} placeholder='Enter Your User ID' required/>
                         <i className='fa fa-id-badge left-icon'/>
                         </div>
                     </div>
@@ -191,7 +197,7 @@ export default function ManageBooking(){
                         <label className='details' htmlFor='phoneNumber'>Phone Number</label>
                         <div className='input-group'>
                         <input type='text' id='phoneNumber' disabled name='phoneNumber' value={singleAppointment.phone}  placeholder='Enter Your Phone Number' required/>
-                        <i className='fa fa-phone left-icon'/>
+                        <i className='fas fa-phone-alt left-icon'/>
                         </div>
                     </div>
                     </div>
@@ -220,10 +226,10 @@ export default function ManageBooking(){
             </tr>
             {
             appointments ? appointments.filter((val)=>{
-                if(searchTerm==='') return val
+                if(searchTerm ==='') return val
                 else if(val.doctor.toLowerCase().includes(searchTerm.toLowerCase())) return val
             }).map(val=> (
-                <tr className='cursor'key={val._id} onClick={()=>{getData(val._id)}}>
+                <tr className='cursor' key={val._id} onClick={()=>{getData(val._id)}}>
                     <td>{val.category}</td>
                     <td>{val.doctor}</td>
                     <td>{val.date}</td>

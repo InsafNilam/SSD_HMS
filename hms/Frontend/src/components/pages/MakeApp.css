@@ -25,9 +25,6 @@
 .fa.fa-exclamation {
   color: #b22222;
 }
-.fa.fa-phone {
-  transform: rotate(90deg);
-}
 /* Booking History CSS */
 .container {
   display: flex;
@@ -150,7 +147,8 @@
   justify-content: space-between;
 }
 .fas.fa-edit,
-.fas.fa-trash-alt {
+.fas.fa-trash-alt,
+.far.fa-arrow-alt-circle-right {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -226,7 +224,6 @@ form .user-details .input-box {
   margin-bottom: 5px;
 }
 .user-details .input-box input:focus,
-.user-details .input-box input:valid,
 .user-details .input-box select:focus,
 .input-group input:focus {
   border-color: #9b59b6;

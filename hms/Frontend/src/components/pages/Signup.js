@@ -41,7 +41,8 @@ export default function SignUp(){
     useEffect(() => {
         if(Object.keys(errors).length===0 && values.email!=='' && values.password!=='' && values.userconfirmpass!=='' && values.username!==''){
             axios.post('http://localhost:4000/sign-up',values).then((res)=>{
-                const token=(res.data.token);
+                let token=(res.data.token);
+                let userId = res.data.id;
                 toast.success("User has succesfully registered",{
                         position: "top-center",
                         autoClose: 2000,
@@ -53,6 +54,8 @@ export default function SignUp(){
                         })
                 if(token!==null){
                     sessionStorage.setItem('isAuth',"true");
+                    sessionStorage.setItem('userId',userId);
+                    sessionStorage.setItem('userRole',"patient");
                     setInterval(()=>window.location.pathname = "/home",1000)
                 }
             }).catch(e => {

@@ -15,8 +15,9 @@ import {AppointmentValidate} from '../loginform/Validate';
 export default function MakeApp(){
     toast.configure();
     const [selectedDate,setSelectedDate]= useState(new Date());
-
     const [values,setValues]=useState({
+        userId:sessionStorage.getItem('userId'),
+        bookId:'',
         name:'',
         address:'',
         email:'',
@@ -26,63 +27,77 @@ export default function MakeApp(){
         doctor:'John',
         category:'Heart'
     });
+    const [timeDetails,setTimeDetails]= useState([]);
 
     const inputName=useRef();
     const inputAddress=useRef();
     const inputEmail=useRef();
     const inputPhone=useRef();
 
+    const handleTime = (id)=>{
+        let isExist = false
+        if(values.date!=='Invalid date'){
+            axios.post("http://localhost:4000/appointment-time",values).then(res =>{
+                res.data.filter(val =>{
+                    if(val.time.includes(id)){
+                        isExist=true
+                    }
+                })
+            })
+        }
+        return isExist
+    }
+
     const handleChange=(event)=>{
         setValues({...values,
             [event.target.name]:event.target.value,
         })
+        console.log(handleTime("11.00 a.m"))
     }
 
+    const radioController=(id)=>{
+        console.log(timeDetails)
+    }
     const [errors,setErrors]=useState({});
 
     const handleSubmit=(event)=>{
         event.preventDefault();
         // Make Sure there is no empty spaces trailing and leading
-        Object.keys(values).map(k=>values[k]=values[k].trim());
+        Object.keys(values).map(k=>values[k] = typeof values[k]==='string'?values[k].trim():values[k]);
         setErrors(AppointmentValidate(values));
     }
-
-    const getLength=()=>{
-        const id='';
-        axios.get('http://localhost:4000/appointment').then(res=>{
-            id=GenerateID((res.data.length+1),"B");
-        })
-        return id;
-    }
     useEffect(() => {
-        if(Object.keys(errors).length===0 && values.name!=='' && values.address!=='' && values.email!=='' && values.date!=='Invalid date' && values.time!==''){
-            console.log(getLength)
-            axios.post('http://localhost:4000/appointment',values).then(res=>{
-                    toast.success(res.data.msg,{
-                        position: "top-center",
-                        autoClose: 1000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: false,
-                        progress: undefined,
+        axios.get('http://localhost:4000/appointment').then(res=>{
+            values.bookId = GenerateID((res.data.length+1),"B");
+        }).then(()=>{
+            if(Object.keys(errors).length===0 && values.name!=='' && values.address!=='' && values.email!=='' && values.date!=='Invalid date' && values.time!==''){
+                axios.post('http://localhost:4000/appointment',values).then(res=>{
+                        toast.success(res.data.msg,{
+                            position: "top-center",
+                            autoClose: 1000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: false,
+                            progress: undefined,
                         })
                         setInterval(()=>window.location.pathname = "/booking-history",1000)
-                }).catch(e => {
-                if (e.response) 
-                        toast.info(e.response.data.msg,{
-                        position: "top-center",
-                        autoClose: 2000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: false,
-                        progress: undefined,
-                    })
-                else console.log('Error', e.message)
-            });
-        }
-    }, [errors])
+                    }).catch(e => {
+                    if (e.response) 
+                            toast.info(e.response.data.msg,{
+                            position: "top-center",
+                            autoClose: 2000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: false,
+                            progress: undefined,
+                        })
+                    else console.log('Error', e.message)
+                });
+            }
+        }, [errors]).catch(e => console.log(e.message))
+        })
 
     return(
         <>
@@ -109,7 +124,7 @@ export default function MakeApp(){
                     <div className='input-box'>
                         <label className='details' htmlFor='address'>Address</label>
                         <div className='input-group'>
-                        <input type='text' autoComplete='off' id='address' value={values.address} name='address' ref={inputAddress} placeholder='Enter Your Address' required onChange={handleChange}/>
+                        <input type='text' autoComplete='off' id='address' value={values.address} name='address' ref={inputAddress} placeholder='Enter Your Address' onChange={handleChange}/>
                         <i className='fa fa-address-card-o left-icon'/>
                         <i className={!errors.address?'fa fa-times right-icon':'fa fa-exclamation right-icon'} onClick={()=>{
                             inputAddress.current.focus();
@@ -136,7 +151,7 @@ export default function MakeApp(){
                         <label className='details' htmlFor='phoneNumber'>Phone Number</label>
                         <div className='input-group'>
                         <input type='text' autoComplete='off' id='phoneNumber' name='phone' value={values.phone}  ref={inputPhone} placeholder='Enter Your Phone Number' onChange={handleChange}/>
-                        <i className='fa fa-phone left-icon'/>
+                        <i className='fas fa-phone-alt left-icon'/>
                         <i className={!errors.phone?'fa fa-times right-icon':'fa fa-exclamation right-icon'} onClick={()=>{
                             inputPhone.current.focus();
                             inputPhone.current.value='';

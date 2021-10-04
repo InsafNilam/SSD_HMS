@@ -3,14 +3,18 @@ import React,{useState,useEffect} from 'react'
 import Navbar from '../Navbar'
 
 export default function BookingHistory() {
+    const userId = sessionStorage.getItem('userId');
     const [appointments,setValues]= useState([])
     const [singleAppointment,setSingle]= useState({})
 
     useEffect(() => {
-        axios.get('http://localhost:4000/appointment')
+        axios.get(`http://localhost:4000/user-appointment/${userId}`)
         .then(res=>{
             setValues(res.data)
-            setSingle(res.data[0])
+            if(Object.keys(res.data).length === 0)
+                setSingle(res.data)
+            else
+                setSingle(res.data[0])
         }).catch(err=>{console.log(err)})
     }, []);
     
@@ -27,14 +31,14 @@ export default function BookingHistory() {
                         <div className='input-box'>
                         <label className='details' htmlFor='userid'>Booking ID</label>
                         <div className='input-group disabled'>
-                        <input type='text' id='userid' name='phoneNumber' value={singleAppointment._id} placeholder='Enter Your User ID' disabled/>
+                        <input type='text' id='userid' name='phoneNumber' value = {singleAppointment.bookId} placeholder='Enter Your User ID' disabled/>
                         <i className='fa fa-id-card-o left-icon'/>
                         </div>
                     </div>
                     <div className='input-box'>
                         <label className='details' htmlFor='fullName'>Full Name</label>
                         <div className='input-group disabled'>
-                        <input type='text' id='fullName' name='fullname' value={singleAppointment.name} placeholder='Enter Your Name' disabled/>
+                        <input type='text' id='fullName' name='fullname' value = {singleAppointment.name} placeholder='Enter Your Name' disabled/>
                         <i className='fa fa-user left-icon'/>
                         </div>
                     </div>
@@ -56,7 +60,7 @@ export default function BookingHistory() {
                         <label className='details' htmlFor='phoneNumber'>Phone Number</label>
                         <div className='input-group disabled'>
                         <input type='text' id='phoneNumber' name='phoneNumber' value={singleAppointment.phone} placeholder='Enter Your Phone Number' disabled/>
-                        <i className='fa fa-phone left-icon'/>
+                        <i className='fas fa-phone-alt left-icon'/>
                         </div>
                     </div>
                     </div>
