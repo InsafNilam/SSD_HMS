@@ -5,7 +5,15 @@ const AppointmentSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    bookId:{
+    prescription:{
+        type:String,
+        required:true
+    },
+    treatment:{
+        type:String,
+        required:true
+    },
+    feed:{
         type:String,
         required:true
     },
@@ -40,6 +48,10 @@ const AppointmentSchema = new mongoose.Schema({
     time:{
         type: String,
         required: true
+    },
+    isConsulted:{
+        type:Boolean,
+        required:true
     },
     register_date:{
         type: Date,

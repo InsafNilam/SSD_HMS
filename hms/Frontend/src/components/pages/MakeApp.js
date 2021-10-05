@@ -17,7 +17,6 @@ export default function MakeApp(){
     const [selectedDate,setSelectedDate]= useState(new Date());
     const [values,setValues]=useState({
         userId:sessionStorage.getItem('userId'),
-        bookId:'',
         name:'',
         address:'',
         email:'',
@@ -25,8 +24,13 @@ export default function MakeApp(){
         date:moment(selectedDate).format('DD MMM YYYY'),
         time:'',
         doctor:'John',
-        category:'Heart'
+        category:'Heart',
+        feed:'Not Provided Yet',
+        prescription:'None',
+        isConsulted: false,
+        treatment: 'None',
     });
+    // TODO
     const [timeDetails,setTimeDetails]= useState([]);
 
     const inputName=useRef();
@@ -34,6 +38,7 @@ export default function MakeApp(){
     const inputEmail=useRef();
     const inputPhone=useRef();
 
+    // TODO
     const handleTime = (id)=>{
         let isExist = false
         if(values.date!=='Invalid date'){
@@ -67,9 +72,6 @@ export default function MakeApp(){
         setErrors(AppointmentValidate(values));
     }
     useEffect(() => {
-        axios.get('http://localhost:4000/appointment').then(res=>{
-            values.bookId = GenerateID((res.data.length+1),"B");
-        }).then(()=>{
             if(Object.keys(errors).length===0 && values.name!=='' && values.address!=='' && values.email!=='' && values.date!=='Invalid date' && values.time!==''){
                 axios.post('http://localhost:4000/appointment',values).then(res=>{
                         toast.success(res.data.msg,{
@@ -96,9 +98,7 @@ export default function MakeApp(){
                     else console.log('Error', e.message)
                 });
             }
-        }, [errors]).catch(e => console.log(e.message))
-        })
-
+        }, [errors])
     return(
         <>
         <Navbar/>

@@ -5,7 +5,7 @@ import Dropdown from './Dropdown';
 import './Navbar.css';
 
 function Navbar (){
-
+    const userName = sessionStorage.getItem('userName')
     const [click,setClick]=useState(false);
     const [dropdown,setdropdown]= useState(false);
     const[mobile,setMobile]= useState(false);
@@ -69,7 +69,7 @@ function Navbar (){
                 <li className='nav-item'>
                     <Link to='/' className='nav-links-mobile' onClick={handleLogout}>
                         <i className='fa fa-user'/>
-                        Logout
+                        {userName}
                     </Link>
                 </li>
             </ul>

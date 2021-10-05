@@ -36,19 +36,25 @@
   width: 0;
 }
 .feed {
+  display: flex;
+  flex-direction: column;
   margin: 10px 0px;
   width: 400px;
   height: 400px;
   overflow-y: scroll;
 }
+.feed div {
+  margin: 5px 0 5px;
+  background-color: #9b59b6;
+  border-radius: 10px;
+  padding: 20px;
+}
 .feed div h3 {
   font-weight: 600;
+  height: max-content;
 }
 .feed div p {
   text-align: left;
-}
-.feed::-webkit-scrollbar {
-  width: 0;
 }
 .right {
   margin-left: 5px;

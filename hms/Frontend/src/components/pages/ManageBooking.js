@@ -14,6 +14,9 @@ import { DialogActions, DialogContent ,Dialog, DialogTitle ,Grow ,useMediaQuery,
 export default function ManageBooking(){
     toast.configure();
     const userId = sessionStorage.getItem('userId');
+    const userRole = sessionStorage.getItem('userRole');
+    const userName = sessionStorage.getItem('userName');
+
     const [selectedDate,setSelectedDate]= useState(new Date());
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -63,17 +66,6 @@ export default function ManageBooking(){
         // Object.keys(values).map(k=>values[k]=values[k].trim());
         setErrors(AppointmentValidate(values));
     }
-
-    useEffect(() => {
-        axios.get(`http://localhost:4000/user-appointment/${userId}`)
-        .then(res=>{
-            setValue(res.data)
-            if(Object.keys(res.data).length === 0)
-                setSingle(res.data)
-            else
-                setSingle(res.data[0])
-        }).catch(err=>{console.log(err)})
-    }, []);
 
     const deleteData=(id)=>{
         axios.delete(`http://localhost:4000/appointment/${id}`).then(res=>{
@@ -155,10 +147,33 @@ export default function ManageBooking(){
         return values.category===id;
     }
 
-    return(
-        <>
-        <Navbar/>
-        <div className='body'>
+    useEffect(() => {
+        if(userRole === 'doctor'){
+            axios.get(`http://localhost:4000/all-appointment/${userName}`)
+            .then(res =>{
+                setValue(res.data)
+                if(Object.keys(res.data).length === 0)
+                    setSingle(res.data)
+                else
+                    setSingle(res.data[0])
+            }).catch(err=>{console.log(err)})
+        }else{
+            axios.get(`http://localhost:4000/user-appointment/${userId}`)
+            .then(res=>{
+                setValue(res.data)
+                if(Object.keys(res.data).length === 0)
+                    setSingle(res.data)
+                else
+                    setSingle(res.data[0])
+            }).catch(err=>{console.log(err)})
+        }
+    }, []);
+
+    if(userRole === 'doctor'){
+        return(
+            <>
+            <Navbar/>
+            <div className='body'>
             <div className='appointment-container'>
                 <div className='title'>Manage Booking</div>
                 <div className='container'>
@@ -168,7 +183,7 @@ export default function ManageBooking(){
                         <div className='input-box'>
                         <label className='details' htmlFor='userid'>Booking ID</label>
                         <div className='input-group'>
-                        <input type='text' id='userid' disabled name='phoneNumber' value={singleAppointment.bookId} placeholder='Enter Your User ID' required/>
+                        <input type='text' id='userid' disabled name='phoneNumber' value={singleAppointment._id} placeholder='Enter Your User ID' required/>
                         <i className='fa fa-id-badge left-icon'/>
                         </div>
                     </div>
@@ -205,7 +220,118 @@ export default function ManageBooking(){
                 </div>
                 <div className='right'>
                     <div className='manage'>
-                        <label htmlFor='search'>Booking ID</label>
+                        <label htmlFor='search'>Category</label>
+                        <div className='input-group'>
+                            <input type='text' id='search' ref={inputSearch} onChange={(e)=>{setSearchTerm(e.target.value)}}/>
+                            <i className='fa fa-search left-icon'/>
+                            <i className='fa fa-times right-icon' onClick={()=>{
+                                        inputSearch.current.focus();
+                                        inputSearch.current.value='';
+                                        setSearchTerm('');
+                                    }}/>
+                        </div>
+                    </div>
+                    <div className='table'>
+            <table>
+            <tr>
+                <th>category</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+            {
+            appointments ? appointments.filter((val)=>{
+                if(searchTerm ==='') return val
+                else if(val.category.toLowerCase().includes(searchTerm.toLowerCase())) return val
+            }).map(val=> (
+                <tr className='cursor' key={val._id} onClick={()=>{setSingle(val)}}>
+                    <td>{val.category}</td>
+                    <td>{val.date}</td>
+                    <td className='edit'>
+                        <i className='fas fa-trash-alt' onClick={()=>{
+                            setId(val._id);
+                            handleDeleteOpen();
+                        }}/>
+                    </td>
+                </tr>
+            )
+            ):null
+            }
+            </table>
+                    </div>
+                </div>
+                </div>
+            </div>
+            {/* Delete Function Dailog Box*/}
+            <Grow in={isDelete} {...(isDelete ? { timeout: 500 } : {})}>
+                <Dialog open={isDelete} onClose={handleDeleteClose} keepMounted>
+                    <DialogTitle><i className="fas fa-exclamation-triangle"/></DialogTitle>
+                    <DialogContent>Are You Sure to Cancel the Appointment?</DialogContent>
+                    <DialogActions>
+                        <div className='button confirm'>
+                            <input type='reset' onClick={()=>{
+                                deleteData(id)
+                                handleDeleteClose()
+                            }} value='Yes, cancel it!'/>
+                            <input type='submit' onClick={handleDeleteClose} value='NO'/>
+                        </div>
+                    </DialogActions>
+                </Dialog>
+            </Grow>
+        </div>
+            </>)
+    }
+    else{
+        return(
+        <>
+        <Navbar/>
+        <div className='body'>
+            <div className='appointment-container'>
+                <div className='title'>Manage Booking</div>
+                <div className='container'>
+                <div className='left'>
+                    <form action='#'>
+                    <div className='user-details'>
+                        <div className='input-box'>
+                        <label className='details' htmlFor='userid'>Booking ID</label>
+                        <div className='input-group'>
+                        <input type='text' id='userid' disabled name='phoneNumber' value={singleAppointment._id} placeholder='Enter Your User ID' required/>
+                        <i className='fa fa-id-badge left-icon'/>
+                        </div>
+                    </div>
+                    <div className='input-box'>
+                        <label className='details' htmlFor='fullName'>Full Name</label>
+                        <div className='input-group'>
+                        <input type='text' id='fullName' disabled name='fullname' value={singleAppointment.name} placeholder='Enter Your Name' required/>
+                        <i className='fa fa-user left-icon'/>
+                        </div>
+                    </div>
+                    <div className='input-box'>
+                        <label className='details' htmlFor='address'>Address</label>
+                        <div className='input-group'>
+                        <input type='text' id='address' disabled name='address' value={singleAppointment.address}  placeholder='Enter Your Address' required/>
+                        <i className='fa fa-address-card-o left-icon'/>
+                        </div>
+                    </div>
+                    <div className='input-box'>
+                        <label className='details' htmlFor='email'>Email</label>
+                        <div className='input-group'>
+                        <input type='text' id='email' disabled name='email' value={singleAppointment.email}  placeholder='Enter Your Email Address' required/>
+                        <i className='fa fa-envelope left-icon'/>
+                        </div>
+                    </div>
+                    <div className='input-box'>
+                        <label className='details' htmlFor='phoneNumber'>Phone Number</label>
+                        <div className='input-group'>
+                        <input type='text' id='phoneNumber' disabled name='phoneNumber' value={singleAppointment.phone}  placeholder='Enter Your Phone Number' required/>
+                        <i className='fas fa-phone-alt left-icon'/>
+                        </div>
+                    </div>
+                    </div>
+                    </form>
+                </div>
+                <div className='right'>
+                    <div className='manage'>
+                        <label htmlFor='search'>Doctor</label>
                         <div className='input-group'>
                             <input type='text' id='search' ref={inputSearch} onChange={(e)=>{setSearchTerm(e.target.value)}}/>
                             <i className='fa fa-search left-icon'/>
@@ -410,4 +536,5 @@ export default function ManageBooking(){
         </div>
         </>
     );
+    }
 }

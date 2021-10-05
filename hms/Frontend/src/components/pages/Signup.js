@@ -43,6 +43,7 @@ export default function SignUp(){
             axios.post('http://localhost:4000/sign-up',values).then((res)=>{
                 let token=(res.data.token);
                 let userId = res.data.id;
+                let userName = res.data.name;
                 toast.success("User has succesfully registered",{
                         position: "top-center",
                         autoClose: 2000,
@@ -56,6 +57,7 @@ export default function SignUp(){
                     sessionStorage.setItem('isAuth',"true");
                     sessionStorage.setItem('userId',userId);
                     sessionStorage.setItem('userRole',"patient");
+                    sessionStorage.setItem('userName',userName);
                     setInterval(()=>window.location.pathname = "/home",1000)
                 }
             }).catch(e => {

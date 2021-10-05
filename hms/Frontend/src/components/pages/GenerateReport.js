@@ -7,7 +7,7 @@ export default function GenerateReport() {
         <Navbar/>
             <div className='body'>
             <div className='appointment-container'>
-                <div className='title'>Manage Booking</div>
+                <div className='title'>Appointment Report</div>
                 <div className='container'></div> 
             </div>
             </div>

@@ -44,6 +44,7 @@ export default function LoginForm() {
                 let token = res.data.token;
                 let userId = res.data.id;
                 let userRole = res.data.type;
+                let userName = res.data.name;
                 toast.success("Login was Successful",{
                         position: "top-center",
                         autoClose: 1000,
@@ -57,6 +58,7 @@ export default function LoginForm() {
                     sessionStorage.setItem('isAuth',"true");
                     sessionStorage.setItem('userId',userId);
                     sessionStorage.setItem('userRole',userRole);
+                    sessionStorage.setItem('userName',userName);
                     setInterval(()=> window.location.pathname = "/home",1000)
                 }
             }).catch(e => {

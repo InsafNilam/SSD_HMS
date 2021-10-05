@@ -1,8 +1,6 @@
-POST http://localhost:4000/
+PUT http://localhost:4000/app-feedback/615c525ce6c66f1660366860
 Content-Type: application/json
 
 {
-    "email":"insaf.12@gmail.com",
-    "password":"123456",
-    "type":"patient"
+    "feed":"Good"
 }

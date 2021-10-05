@@ -7,7 +7,7 @@ const Appointment= require('../Models/Appointment');
 router.get('/user-appointment/:id',(req,res)=>{
     if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
 
-    Appointment.find({userId : req.params.id},(err,doc)=>{
+    Appointment.find({userId : req.params.id ,isConsulted: false},(err,doc)=>{
         if(!err) res.send(doc)
         else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
     })
@@ -15,9 +15,41 @@ router.get('/user-appointment/:id',(req,res)=>{
 
 // Get All Appointments
 router.get('/appointment',(req,res)=>{
-    Appointment.find((err,doc)=>{
+    Appointment.find({isConsulted:false},(err,doc)=>{
         if(!err) res.send(doc);
         else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
+    })
+})
+
+// Get All Appointment Feedback
+router.get('/feed-appointment',(req,res)=>{
+    Appointment.find({isConsulted:true},(err,doc)=>{
+        if(!err) res.send(doc);
+        else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
+    })
+})
+
+// Get All Appointments By Doctor Name
+router.get('/all-appointment/:name',(req,res)=>{
+    Appointment.find({doctor:req.params.name},(err,doc)=>{
+        if(!err) res.send(doc);
+        else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
+    })
+})
+
+// Get All Booking History By Doctor Name
+router.get('/appointment/:name',(req,res)=>{
+    Appointment.find({isConsulted:false, doctor:req.params.name},(err,doc)=>{
+        if(!err) res.send(doc);
+        else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
+    })
+})
+
+// Get Doctor Treatment History
+router.get('/doctor-treatment/:name',(req,res)=>{
+    Appointment.find({isConsulted: true, doctor:req.params.name},(err,doc)=>{
+        if(!err) res.send(doc)
+        else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
     })
 })
 
@@ -31,6 +63,7 @@ router.get('/appointment/:id',(req,res)=>{
     })
 })
 
+// TODO
 // Retrieve Time Details
 router.post('/appointment-time',(req,res)=>{
     const {doctor, date,category} = req.body;
@@ -39,6 +72,36 @@ router.post('/appointment-time',(req,res)=>{
         if(!err) res.send(doc)
         else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
     })
+})
+
+// Updating Prescription and Treatment
+router.put('/doctor-prescription/:id',(req,res)=>{
+    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
+
+    const Prescription = {
+        prescription : req.body.prescription,
+        treatment: req.body.treatment,
+        isConsulted : true,
+    }
+
+    Appointment.findByIdAndUpdate(req.params.id,{$set : Prescription},{new:true},(err,doc)=>{
+        if(!err) res.send(doc)
+        else console.log("Error in Updating Appointment :" +JSON.stringify(err,undefined,2));
+    });
+})
+
+// Updating Feedback
+router.put('/app-feedback/:id',(req,res)=>{
+    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
+
+    const feedback = {
+        feed : req.body.feed,
+    }
+
+    Appointment.findByIdAndUpdate(req.params.id,{$set : feedback},{new:true},(err,doc)=>{
+        if(!err) res.send(doc)
+        else console.log("Error in Updating Appointment :" +JSON.stringify(err,undefined,2));
+    });
 })
 
 //  Update Appointment
@@ -72,9 +135,19 @@ router.delete('/appointment/:id',(req,res)=>{
     })
 })
 
+// Get Patient Treatment History
+router.get('/user-treatment/:id',(req,res)=>{
+    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
+
+    Appointment.find({isConsulted: true},(err,doc)=>{
+        if(!err) res.send(doc)
+        else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
+    })
+})
+
 // Make Appointment
 router.post('/appointment',(req,res)=>{
-    const {name ,email , address, phone, doctor, date, time, category, userId, bookId} = req.body;
+    const {name ,email , address, phone, doctor, date, time, category, userId, feed, isConsulted, prescription, treatment} = req.body;
 
     Appointment.findOne({doctor,category,date,time}).then((appointment)=>{
         if(appointment)
@@ -82,7 +155,7 @@ router.post('/appointment',(req,res)=>{
 
         const newAppointment= new Appointment({
             userId,
-            bookId,
+            feed,
             name,
             email,
             address,
@@ -91,6 +164,9 @@ router.post('/appointment',(req,res)=>{
             doctor,
             time,
             category,
+            isConsulted,
+            prescription,
+            treatment,
         });
         newAppointment.save();
         
