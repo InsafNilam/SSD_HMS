@@ -21,6 +21,22 @@ router.get('/appointment',(req,res)=>{
     })
 })
 
+// Get All Appointments By Date But Not Consulted
+router.get('/report-not/:date',(req,res)=>{
+    Appointment.find({isConsulted:false,date:req.params.date},(err,doc)=>{
+        if(!err) res.send(doc);
+        else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
+    })
+})
+
+// Get All Appointments By Date But Consulted
+router.get('/report/:date',(req,res)=>{
+    Appointment.find({isConsulted:true,date:req.params.date},(err,doc)=>{
+        if(!err) res.send(doc);
+        else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
+    })
+})
+
 // Get All Appointment Feedback
 router.get('/feed-appointment',(req,res)=>{
     Appointment.find({isConsulted:true},(err,doc)=>{

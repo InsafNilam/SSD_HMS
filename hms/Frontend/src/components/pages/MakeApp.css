@@ -9,6 +9,12 @@
 .cursor {
   cursor: pointer;
 }
+h5 {
+  text-align: right;
+}
+.preview {
+  text-align: center;
+}
 .appointment-container {
   max-width: 900px;
   margin: 0 auto;
@@ -280,7 +286,8 @@ form .button,
 }
 form .button input,
 .login .button input,
-.button.confirm input {
+.button.confirm input,
+.preview input {
   height: 100%;
   font-size: 16px;
   width: 35%;
@@ -294,20 +301,25 @@ form .button input,
 }
 form .button input:hover,
 .login .button input:hover,
-.button.confirm input:hover {
+.button.confirm input:hover,
+.preview input:hover {
   opacity: 0.4;
   border: 2px solid black;
 }
 form .button input[type="submit"],
 .login .button input[type="submit"],
-.button.confirm input[type="submit"] {
+.button.confirm input[type="submit"],
+.preview input[type="submit"] {
   background: green;
 }
 form .button input[type="reset"],
 .button.confirm input[type="reset"] {
   background: red;
 }
-
+.preview input {
+  margin: 0;
+  height: 45px;
+}
 @media screen and (max-width: 584px) {
   .appointment-container {
     max-width: 100%;

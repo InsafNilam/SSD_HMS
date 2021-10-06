@@ -1,7 +1,7 @@
 import React,{useEffect,useState,useRef} from 'react'
 import Navbar from '../Navbar'
 import axios from 'axios';
-import { toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
 import moment from 'moment';
