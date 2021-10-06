@@ -6,6 +6,7 @@ const User = require('../Models/User');
 
 const secret = 'secret123'
 
+// Patient Sign Up
 router.post('/sign-up',async (req,res)=>{
 
     const username= req.body.username;
