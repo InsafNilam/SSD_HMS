@@ -37,9 +37,9 @@ export default function Feedback() {
                         {
                             appointments ? appointments.map(appointment=> (
                                 <div key={appointment._id}>
-                                    <h3>{appointment.doctor}</h3>
-                                    <p>{appointment.date} {appointment.time}</p>
-                                    <p>{appointment.feed}</p>
+                                    <h3>Doctor Name: {appointment.doctor}</h3>
+                                    <p>Date: {appointment.date} {appointment.time}</p>
+                                    <p>Feed: {appointment.feed}</p>
                                 </div>
                             )
                             ):null

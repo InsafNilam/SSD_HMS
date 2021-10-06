@@ -126,11 +126,6 @@ export default function ManageBooking(){
                         progress: undefined,
             })
     }
-    const getData =(id)=>{
-        axios.get(`http://localhost:4000/appointment/${id}`).then(res=>{
-            setSingle(res.data)
-        }).catch(err=>{console.log(err)})
-    }
     const setData=(id)=>{
         axios.get(`http://localhost:4000/appointment/${id}`).then(res=>{
             setValues(res.data)
@@ -355,7 +350,7 @@ export default function ManageBooking(){
                 if(searchTerm ==='') return val
                 else if(val.doctor.toLowerCase().includes(searchTerm.toLowerCase())) return val
             }).map(val=> (
-                <tr className='cursor' key={val._id} onClick={()=>{getData(val._id)}}>
+                <tr className='cursor' key={val._id} onClick={()=>{setSingle(val)}}>
                     <td>{val.category}</td>
                     <td>{val.doctor}</td>
                     <td>{val.date}</td>

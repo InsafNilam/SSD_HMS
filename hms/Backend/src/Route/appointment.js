@@ -156,7 +156,7 @@ router.delete('/appointment/:id',(req,res)=>{
 router.get('/user-treatment/:id',(req,res)=>{
     if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
 
-    Appointment.find({isConsulted: true},(err,doc)=>{
+    Appointment.find({userId:req.params.id, isConsulted: true},(err,doc)=>{
         if(!err) res.send(doc)
         else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
     })
