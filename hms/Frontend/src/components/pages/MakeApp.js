@@ -2,7 +2,6 @@ import React,{useState, useEffect,useRef} from 'react';
 import Navbar from '../Navbar';
 import './MakeApp.css';
 import axios from 'axios'
-import GenerateID from './GenerateID';
 
 import { toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
@@ -30,38 +29,16 @@ export default function MakeApp(){
         isConsulted: false,
         treatment: 'None',
     });
-    // TODO
-    const [timeDetails,setTimeDetails]= useState([]);
 
     const inputName=useRef();
     const inputAddress=useRef();
     const inputEmail=useRef();
     const inputPhone=useRef();
 
-    // TODO
-    const handleTime = (id)=>{
-        let isExist = false
-        if(values.date!=='Invalid date'){
-            axios.post("http://localhost:4000/appointment-time",values).then(res =>{
-                res.data.filter(val =>{
-                    if(val.time.includes(id)){
-                        isExist=true
-                    }
-                })
-            })
-        }
-        return isExist
-    }
-
     const handleChange=(event)=>{
         setValues({...values,
             [event.target.name]:event.target.value,
         })
-        console.log(handleTime("11.00 a.m"))
-    }
-
-    const radioController=(id)=>{
-        console.log(timeDetails)
     }
     const [errors,setErrors]=useState({});
 

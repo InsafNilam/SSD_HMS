@@ -3,7 +3,7 @@ const { isValidObjectId } = require('mongoose');
 const router= express.Router();
 const Appointment= require('../Models/Appointment');
 
-// Retrieve Appointment By User ID
+// Get All Booking Details By User ID
 router.get('/user-appointment/:id',(req,res)=>{
     if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
 
@@ -13,7 +13,7 @@ router.get('/user-appointment/:id',(req,res)=>{
     })
 })
 
-// Get All Appointments
+// Get All Booking Details, but not consulted
 router.get('/appointment',(req,res)=>{
     Appointment.find({isConsulted:false},(err,doc)=>{
         if(!err) res.send(doc);
@@ -21,7 +21,7 @@ router.get('/appointment',(req,res)=>{
     })
 })
 
-// Get All Appointments By Date But Not Consulted
+// Get All Booking Details By Date, but not Consulted
 router.get('/report-not/:date',(req,res)=>{
     Appointment.find({isConsulted:false,date:req.params.date},(err,doc)=>{
         if(!err) res.send(doc);
@@ -29,7 +29,7 @@ router.get('/report-not/:date',(req,res)=>{
     })
 })
 
-// Get All Appointments By Date But Consulted
+// Get All Booking Details By Date, but Consulted
 router.get('/report/:date',(req,res)=>{
     Appointment.find({isConsulted:true,date:req.params.date},(err,doc)=>{
         if(!err) res.send(doc);
@@ -37,7 +37,7 @@ router.get('/report/:date',(req,res)=>{
     })
 })
 
-// Get All Appointment Feedback
+// Get All Appointment Feedbacks
 router.get('/feed-appointment',(req,res)=>{
     Appointment.find({isConsulted:true},(err,doc)=>{
         if(!err) res.send(doc);
@@ -45,7 +45,8 @@ router.get('/feed-appointment',(req,res)=>{
     })
 })
 
-// Get All Appointments By Doctor Name
+// Not Used
+// Get All Booking Details By Doctor Name
 router.get('/all-appointment/:name',(req,res)=>{
     Appointment.find({doctor:req.params.name},(err,doc)=>{
         if(!err) res.send(doc);
@@ -53,7 +54,7 @@ router.get('/all-appointment/:name',(req,res)=>{
     })
 })
 
-// Get All Booking History By Doctor Name
+// Get All Booking History By Doctor Name, but not consulted
 router.get('/appointment/:name',(req,res)=>{
     Appointment.find({isConsulted:false, doctor:req.params.name},(err,doc)=>{
         if(!err) res.send(doc);
@@ -61,7 +62,7 @@ router.get('/appointment/:name',(req,res)=>{
     })
 })
 
-// Get Doctor Treatment History
+// Get Treatment History of Patient (Doctor) 
 router.get('/doctor-treatment/:name',(req,res)=>{
     Appointment.find({isConsulted: true, doctor:req.params.name},(err,doc)=>{
         if(!err) res.send(doc)
@@ -69,7 +70,7 @@ router.get('/doctor-treatment/:name',(req,res)=>{
     })
 })
 
-// Retrieve Appointment By Booking ID
+// Get Appointment By Booking ID
 router.get('/appointment/:id',(req,res)=>{
     if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
     
@@ -79,7 +80,7 @@ router.get('/appointment/:id',(req,res)=>{
     })
 })
 
-// TODO
+// Not Used
 // Retrieve Time Details
 router.post('/appointment-time',(req,res)=>{
     const {doctor, date,category} = req.body;
@@ -90,7 +91,7 @@ router.post('/appointment-time',(req,res)=>{
     })
 })
 
-// Updating Prescription and Treatment
+// Updating Prescription and Treatment (Doctor)
 router.put('/doctor-prescription/:id',(req,res)=>{
     if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
 
@@ -106,7 +107,7 @@ router.put('/doctor-prescription/:id',(req,res)=>{
     });
 })
 
-// Updating Feedback
+// Updating Feedback (Patient)
 router.put('/app-feedback/:id',(req,res)=>{
     if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
 
@@ -120,7 +121,7 @@ router.put('/app-feedback/:id',(req,res)=>{
     });
 })
 
-//  Update Appointment
+//  Update Appointment (Patient)
 router.put('/appointment/:id',(req,res)=>{
     if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
     
@@ -141,7 +142,7 @@ router.put('/appointment/:id',(req,res)=>{
     });
 })
 
-// Delete Appointment
+// Delete Appointment (Patient)
 router.delete('/appointment/:id',(req,res)=>{
     if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
     
@@ -151,7 +152,7 @@ router.delete('/appointment/:id',(req,res)=>{
     })
 })
 
-// Get Patient Treatment History
+// Get Patient Treatment History By User ID
 router.get('/user-treatment/:id',(req,res)=>{
     if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
 
@@ -161,7 +162,7 @@ router.get('/user-treatment/:id',(req,res)=>{
     })
 })
 
-// Make Appointment
+// Book an Appointment
 router.post('/appointment',(req,res)=>{
     const {name ,email , address, phone, doctor, date, time, category, userId, feed, isConsulted, prescription, treatment} = req.body;
 

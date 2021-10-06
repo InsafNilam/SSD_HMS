@@ -149,7 +149,7 @@ export default function ManageBooking(){
 
     useEffect(() => {
         if(userRole === 'doctor'){
-            axios.get(`http://localhost:4000/all-appointment/${userName}`)
+            axios.get(`http://localhost:4000/appointment/${userName}`)
             .then(res =>{
                 setValue(res.data)
                 if(Object.keys(res.data).length === 0)

@@ -21,6 +21,7 @@ export default function GenerateReport() {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('lg'));
 
+    // Pie Chart Data
     const state = {
         labels:['Attended Patient','Not Attended Patient'],
 
@@ -35,20 +36,26 @@ export default function GenerateReport() {
             '#501800',
             '#4B5000',
             ],
+            // noFeeds: isConsulted{true}
+            // noApp: isConsulted{false}
             data: [(noFeeds/(noFeeds + noApp)*100).toFixed(2),(noApp/(noFeeds + noApp)*100).toFixed(2)]
             }
         ]
     }
     useEffect(()=>{
+        // Get Consulted records today
         axios.get(`http://localhost:4000/report-not/${date}`).then(res=>{
             setActive(res.data.length);
         }).catch(err=> console.log(err))
-        axios.get(`http://localhost:4000/report-not/${date}`).then(res=>{
+        // Get Not Consulted Records today
+        axios.get(`http://localhost:4000/report/${date}`).then(res=>{
             setNotActive(res.data.length);
         }).catch(err=> console.log(err))
+        // Get Feedbacks up to now
         axios.get('http://localhost:4000/feed-appointment/').then(res=>{
             setNoFeeds(res.data.length);
         }).catch(err=> console.log(err))
+        // Get Appointments up to now
         axios.get('http://localhost:4000/appointment/').then(res=>{
             setNoApp(res.data.length);
         }).catch(err=> console.log(err))
