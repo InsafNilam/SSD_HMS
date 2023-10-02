@@ -26,7 +26,7 @@ const SignUpValidate=(values)=>{
 
     if(!values.email){
         errors.email="Email is Required"
-    }else if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)){
+    }else if(!/^\w++(?:[-]?\w+)*+@\w++(?:[-]?\w+)*+(?:\.\w{2,3})++$/.test(values.email)){
         errors.email="Email address invalid"
     }
 
@@ -50,7 +50,7 @@ const AppointmentValidate=(values)=>{
 
     if(!values.email){
         errors.email="Patient Email address is Required"
-    }else if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)){
+    }else if(!/^\w++(?:[-]?\w+)*+@\w++(?:[-]?\w+)*+(?:\.\w{2,3})++$/.test(values.email)){
         errors.email="Patient Email address invalid"
     }
 
