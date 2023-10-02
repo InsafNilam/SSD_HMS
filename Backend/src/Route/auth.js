@@ -5,7 +5,7 @@ const bcrypt =require('bcrypt')
 const jwt = require('jsonwebtoken'); 
 const User = require('../Models/User');
 
-router.post('/',(req, res)=>{
+router.post('/', async (req, res)=>{
 
     const {email , password, type} = req.body;
     let query = { email: email?.toString(), type: type?.toString() }
@@ -19,25 +19,23 @@ router.post('/',(req, res)=>{
         res.status(400).json({msg : 'User Does not exists'});
     }
 
-        //Validate User
-        bcrypt.compare(password, user.password)
-        .then(isMatch=>{
-            if(!isMatch) return res.status(400).json({ msg : 'Invalid Credentials'});
-                jwt.sign(
-                    {id: user.id},
-                    process.env.JWT_SECRET,
-                    {expiresIn:3600},
-                    (err,token)=>{
-                        if(err) throw err;
-                        res.json({
-                            token,
-                            id:user.id,
-                            name:user.username,
-                            email:user.email,
-                            type:user.type
-                        })
-                    }
-                );
-        }).catch(e => console.log(e))
-    })
+    if (user && (await bcrypt.compare(password, admin.password))) {
+        res.json({
+            token: generateToken(user._id),
+            id: user._id,
+            name: user.username,
+            email: user.email,
+            type: user.type
+        })
+    }else{
+        res.status(400).json({ msg : 'Invalid Credentials'});
+    }
+})
+
+const generateToken = (id) => {
+return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: '1h',
+})
+}
+
 module.exports = router;

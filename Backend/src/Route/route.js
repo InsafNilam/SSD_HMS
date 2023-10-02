@@ -26,20 +26,28 @@ router.post('/sign-up',async (req,res) => {
     const saltPassword = await bcrypt.genSalt(10);
     const securePassword = await bcrypt.hash(password,saltPassword);
     
-    const newUser = new User({
+    const newUser = await User.create({
         username,
         email,
         password: securePassword,
     });
 
-    newUser.save().then((user)=>{
+    if (newUser) {
         res.json({
-            token:jwt.sign({id:user.id}, process.env.JWT_SECRET, {expiresIn:3600}),
-            id:user.id,
-            name:user.username,
-            email:user.email
-            })
-    }).catch(e => console.log(e));
+            token: generateToken(newUser._id),
+            id: newUser._id,
+            name: newUser.username,
+            email: newUser.email
+        })
+    }else{
+        res.status(400).json({msg: 'Invalid user! please check again'})
+    }
 })
+
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+      expiresIn: 3600,
+    })
+  }
 
 module.exports = router;
