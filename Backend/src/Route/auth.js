@@ -9,8 +9,9 @@ const secret = 'secret123'
 router.post('/',(req,res)=>{
 
     const {email , password, type} = req.body;
+    let query = { email, type }
 
-    User.findOne({email ,type})
+    User.findOne(query)
     .then(user =>{
         if(!user) return res.status(400).json({msg : 'User Does not exists'});
 

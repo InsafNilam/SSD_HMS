@@ -16,7 +16,9 @@ router.post('/sign-up',async (req,res)=>{
     const saltPassword = await bcrypt.genSalt(10);
     const securePassword = await bcrypt.hash(password,saltPassword);
 
-    await User.findOne({email})
+    let query = { email }
+
+    await User.findOne(query)
     .then((user) =>{
         if(user) return res.status(400).json({msg : 'User already exists'});
         const newUser = new User({

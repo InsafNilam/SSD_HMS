@@ -6,8 +6,9 @@ const Appointment= require('../Models/Appointment');
 // Get All Booking Details By User ID
 router.get('/user-appointment/:id',(req,res)=>{
     if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
+    let query = { userId:req.params.id, isConsulted: false }
 
-    Appointment.find({userId : req.params.id ,isConsulted: false},(err,doc)=>{
+    Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc)
         else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
     })
@@ -15,7 +16,8 @@ router.get('/user-appointment/:id',(req,res)=>{
 
 // Get All Booking Details, but not consulted
 router.get('/appointment',(req,res)=>{
-    Appointment.find({isConsulted:false},(err,doc)=>{
+    let query = { isConsulted:false }
+    Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc);
         else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
     })
@@ -23,7 +25,8 @@ router.get('/appointment',(req,res)=>{
 
 // Get All Booking Details By Date, but not Consulted
 router.get('/report-not/:date',(req,res)=>{
-    Appointment.find({isConsulted:false,date:req.params.date},(err,doc)=>{
+    let query = {isConsulted:false, date:req.params.date}
+    Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc);
         else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
     })
@@ -31,7 +34,8 @@ router.get('/report-not/:date',(req,res)=>{
 
 // Get All Booking Details By Date, but Consulted
 router.get('/report/:date',(req,res)=>{
-    Appointment.find({isConsulted:true,date:req.params.date},(err,doc)=>{
+    let query = { isConsulted:true, date:req.params.date}
+    Appointment.find(query, (err,doc) =>{
         if(!err) res.send(doc);
         else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
     })
@@ -39,7 +43,8 @@ router.get('/report/:date',(req,res)=>{
 
 // Get All Appointment Feedbacks
 router.get('/feed-appointment',(req,res)=>{
-    Appointment.find({isConsulted:true},(err,doc)=>{
+    let query = { isConsulted:true }
+    Appointment.find(query, (err,doc) => {
         if(!err) res.send(doc);
         else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
     })
@@ -48,15 +53,17 @@ router.get('/feed-appointment',(req,res)=>{
 // Not Used
 // Get All Booking Details By Doctor Name
 router.get('/all-appointment/:name',(req,res)=>{
-    Appointment.find({doctor:req.params.name},(err,doc)=>{
+    let query = { doctor:req.params.name }
+    Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc);
         else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
     })
 })
 
 // Get All Booking History By Doctor Name, but not consulted
-router.get('/appointment/:name',(req,res)=>{
-    Appointment.find({isConsulted:false, doctor:req.params.name},(err,doc)=>{
+router.get('/appointment/:name',(req,res)=> {
+    let query = { isConsulted:false, doctor:req.params.name }
+    Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc);
         else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
     })
@@ -64,7 +71,8 @@ router.get('/appointment/:name',(req,res)=>{
 
 // Get Treatment History of Patient (Doctor) 
 router.get('/doctor-treatment/:name',(req,res)=>{
-    Appointment.find({isConsulted: true, doctor:req.params.name},(err,doc)=>{
+    let query = { isConsulted:true, doctor:req.params.name}
+    Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc)
         else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
     })
@@ -72,9 +80,9 @@ router.get('/doctor-treatment/:name',(req,res)=>{
 
 // Get Appointment By Booking ID
 router.get('/appointment/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
+    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
     
-    Appointment.findById(req.params.id,(err,doc)=>{
+    Appointment.findById(req.params.id, (err,doc)=>{
         if(!err) res.send(doc)
         else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
     })
@@ -84,8 +92,9 @@ router.get('/appointment/:id',(req,res)=>{
 // Retrieve Time Details
 router.post('/appointment-time',(req,res)=>{
     const {doctor, date,category} = req.body;
+    let query = {doctor, category, date }
 
-    Appointment.find({doctor,category,date},(err,doc)=>{
+    Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc)
         else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
     })
@@ -93,7 +102,7 @@ router.post('/appointment-time',(req,res)=>{
 
 // Updating Prescription and Treatment (Doctor)
 router.put('/doctor-prescription/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
+    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
 
     const Prescription = {
         prescription : req.body.prescription,
@@ -101,7 +110,7 @@ router.put('/doctor-prescription/:id',(req,res)=>{
         isConsulted : true,
     }
 
-    Appointment.findByIdAndUpdate(req.params.id,{$set : Prescription},{new:true},(err,doc)=>{
+    Appointment.findByIdAndUpdate(req.params.id, {$set : Prescription}, {new:true}, (err,doc)=>{
         if(!err) res.send(doc)
         else console.log("Error in Updating Appointment :" +JSON.stringify(err,undefined,2));
     });
@@ -109,13 +118,11 @@ router.put('/doctor-prescription/:id',(req,res)=>{
 
 // Updating Feedback (Patient)
 router.put('/app-feedback/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
+    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
 
-    const feedback = {
-        feed : req.body.feed,
-    }
+    const feedback = {feed : req.body.feed}
 
-    Appointment.findByIdAndUpdate(req.params.id,{$set : feedback},{new:true},(err,doc)=>{
+    Appointment.findByIdAndUpdate(req.params.id, {$set : feedback}, {new:true}, (err,doc)=>{
         if(!err) res.send(doc)
         else console.log("Error in Updating Appointment :" +JSON.stringify(err,undefined,2));
     });
@@ -123,7 +130,7 @@ router.put('/app-feedback/:id',(req,res)=>{
 
 //  Update Appointment (Patient)
 router.put('/appointment/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
+    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
     
     const app = {
         name : req.body.name,
@@ -136,7 +143,7 @@ router.put('/appointment/:id',(req,res)=>{
         category:req.body.category,
     }
 
-    Appointment.findByIdAndUpdate(req.params.id,{$set : app},{new:true},(err,doc)=>{
+    Appointment.findByIdAndUpdate(req.params.id, {$set : app}, {new:true}, (err,doc)=>{
         if(!err) res.send(doc)
         else console.log("Error in Updating Appointment :" +JSON.stringify(err,undefined,2));
     });
@@ -146,7 +153,7 @@ router.put('/appointment/:id',(req,res)=>{
 router.delete('/appointment/:id',(req,res)=>{
     if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
     
-    Appointment.findByIdAndDelete(req.params.id,(err,doc)=>{
+    Appointment.findByIdAndDelete(req.params.id, (err,doc)=>{
         if(!err) res.send(doc);
         else console.log("Error in Deleting Appointment :" +JSON.stringify(err,undefined,2));
     })
@@ -154,9 +161,10 @@ router.delete('/appointment/:id',(req,res)=>{
 
 // Get Patient Treatment History By User ID
 router.get('/user-treatment/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
+    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
 
-    Appointment.find({userId:req.params.id, isConsulted: true},(err,doc)=>{
+    let query = { userId:req.params.id, isConsulted: true };
+    Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc)
         else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
     })
@@ -165,8 +173,9 @@ router.get('/user-treatment/:id',(req,res)=>{
 // Book an Appointment
 router.post('/appointment',(req,res)=>{
     const {name ,email , address, phone, doctor, date, time, category, userId, feed, isConsulted, prescription, treatment} = req.body;
+    let query = { doctor, category, date, time}
 
-    Appointment.findOne({doctor,category,date,time}).then((appointment)=>{
+    Appointment.findOne(query).then((appointment)=>{
         if(appointment)
             return res.status(400).json({msg : 'Appointment does exists'});
 
