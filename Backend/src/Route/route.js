@@ -4,8 +4,6 @@ const bcrypt =require('bcrypt')
 const jwt = require('jsonwebtoken'); 
 const User = require('../Models/User');
 
-const secret = 'secret123'
-
 // Patient Sign Up
 router.post('/sign-up',async (req,res) => {
 
@@ -36,7 +34,7 @@ router.post('/sign-up',async (req,res) => {
 
     newUser.save().then((user)=>{
         res.json({
-            token:jwt.sign({id:user.id}, secret, {expiresIn:3600}),
+            token:jwt.sign({id:user.id}, process.env.JWT_SECRET, {expiresIn:3600}),
             id:user.id,
             name:user.username,
             email:user.email

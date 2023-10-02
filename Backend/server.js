@@ -3,6 +3,12 @@ const cors = require('cors')
 const helmet = require('helmet')
 const app = express();
 
+
+
+const corsOptions = {
+  origin: ['http://localhost:4000', 'http://localhost:5000'] // Sensitive
+};
+
 const connectDB = require('./src/Config/DB');
 const routerURLs = require('./src/Route/route')
 const authURLs = require('./src/Route/auth')
@@ -12,7 +18,7 @@ connectDB();
 
 app.use(express.json());
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use('/',routerURLs);
 app.use('/',authURLs);

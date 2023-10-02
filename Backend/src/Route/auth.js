@@ -5,8 +5,6 @@ const bcrypt =require('bcrypt')
 const jwt = require('jsonwebtoken'); 
 const User = require('../Models/User');
 
-const secret = 'secret123'
-
 router.post('/',(req, res)=>{
 
     const {email , password, type} = req.body;
@@ -27,7 +25,7 @@ router.post('/',(req, res)=>{
             if(!isMatch) return res.status(400).json({ msg : 'Invalid Credentials'});
                 jwt.sign(
                     {id: user.id},
-                    secret,
+                    process.env.JWT_SECRET,
                     {expiresIn:3600},
                     (err,token)=>{
                         if(err) throw err;
