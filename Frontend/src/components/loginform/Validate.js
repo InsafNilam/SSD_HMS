@@ -7,7 +7,7 @@ const LoginValidate = (values) => {
     }
 
     if(!values.password){
-        errors.password="UserPassword is Required"
+        errors.password="UserPass is Required"
     }
 
     return errors;
@@ -19,7 +19,7 @@ const SignUpValidate=(values)=>{
         errors.username="UserName is Required"
     }
     if(!values.password){
-        errors.password="UserPassword is Required"
+        errors.password="UserPass is Required"
     }else if(values.password.length < 6){
         errors.password="Password needs to be atleast 6 characters in length"
     }
@@ -31,7 +31,7 @@ const SignUpValidate=(values)=>{
     }
 
     if(!values.userconfirmpass){
-        errors.userconfirmpass="UserPassword is Required"
+        errors.userconfirmpass="UserPass is Required"
     }else if(values.userconfirmpass!==values.password){
         errors.userconfirmpass="Password do not match"
     }
