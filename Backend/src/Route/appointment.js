@@ -5,21 +5,22 @@ const Appointment= require('../Models/Appointment');
 
 // Get All Booking Details By User ID
 router.get('/user-appointment/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) {
+    const id = req.params.id.toString();
+    if(!isValidObjectId(id)) {
         res.set('Content-Type', 'text/plain');
-        return res.status(400).send(`No Record with given id : ${req.params.id}`)
+        return res.status(400).send(`No Record with given id : ${id}`)
     };
 
-    let query = { userId : req.params.id.toString(), isConsulted : false }
+    let query = { userId : id, isConsulted : false }
     Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc)
-        else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
+        else console.log("Error in Retrieving Appointment :" + JSON.stringify(err,undefined,2));
     })
 })
 
 // Get All Booking Details, but not consulted
 router.get('/appointment',(req,res)=>{
-    let query = { isConsulted:false }
+    let query = { isConsulted: false }
     Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc);
         else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
@@ -59,7 +60,7 @@ router.get('/all-appointment/:name',(req,res)=>{
     let query = { doctor: req.params.name.toString() }
     Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc);
-        else console.log('Error in Retrieving Appointment :'+JSON.stringify(err,undefined,2));
+        else console.log('Error in Retrieving Appointment :' + JSON.stringify(err,undefined,2));
     })
 })
 
