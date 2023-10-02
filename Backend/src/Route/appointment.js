@@ -5,9 +5,12 @@ const Appointment= require('../Models/Appointment');
 
 // Get All Booking Details By User ID
 router.get('/user-appointment/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : $(req.params.id)`);
-    let query = { userId:req.params.id, isConsulted: false }
+    if(!isValidObjectId(req.params.id)) {
+        res.set('Content-Type', 'text/plain');
+        return res.status(400).send(`No Record with given id : ${req.params.id}`)
+    };
 
+    let query = { userId:req.params.id, isConsulted: false }
     Appointment.find(query, (err,doc)=>{
         if(!err) res.send(doc)
         else console.log("Error in Retrieving Appointment :" +JSON.stringify(err,undefined,2));
@@ -80,7 +83,10 @@ router.get('/doctor-treatment/:name',(req,res)=>{
 
 // Get Appointment By Booking ID
 router.get('/appointment/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
+    if(!isValidObjectId(req.params.id)) {
+        res.set('Content-Type', 'text/plain');
+        return res.status(400).send(`No Record with given id : ${req.params.id}`)
+    };
     
     Appointment.findById(req.params.id, (err,doc)=>{
         if(!err) res.send(doc)
@@ -102,7 +108,10 @@ router.post('/appointment-time',(req,res)=>{
 
 // Updating Prescription and Treatment (Doctor)
 router.put('/doctor-prescription/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
+    if(!isValidObjectId(req.params.id)) {
+        res.set('Content-Type', 'text/plain');
+        return res.status(400).send(`No Record with given id : ${req.params.id}`)
+    };
 
     const Prescription = {
         prescription : req.body.prescription,
@@ -118,7 +127,10 @@ router.put('/doctor-prescription/:id',(req,res)=>{
 
 // Updating Feedback (Patient)
 router.put('/app-feedback/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
+    if(!isValidObjectId(req.params.id)) {
+        res.set('Content-Type', 'text/plain');
+        return res.status(400).send(`No Record with given id : ${req.params.id}`);
+    }
 
     const feedback = {feed : req.body.feed}
 
@@ -130,7 +142,10 @@ router.put('/app-feedback/:id',(req,res)=>{
 
 //  Update Appointment (Patient)
 router.put('/appointment/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
+    if(!isValidObjectId(req.params.id)) {
+        res.set('Content-Type', 'text/plain');
+        return res.status(400).send(`No Record with given id : ${req.params.id}`);
+    }
     
     const app = {
         name : req.body.name,
@@ -151,7 +166,10 @@ router.put('/appointment/:id',(req,res)=>{
 
 // Delete Appointment (Patient)
 router.delete('/appointment/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
+    if(!isValidObjectId(req.params.id)) {
+        res.set('Content-Type', 'text/plain');
+        return res.status(400).send(`No Record with given id : ${req.params.id}`);
+    }
     
     Appointment.findByIdAndDelete(req.params.id, (err,doc)=>{
         if(!err) res.send(doc);
@@ -161,7 +179,10 @@ router.delete('/appointment/:id',(req,res)=>{
 
 // Get Patient Treatment History By User ID
 router.get('/user-treatment/:id',(req,res)=>{
-    if(!isValidObjectId(req.params.id)) return res.status(400).send(`No Record with given id : ${req.params.id}`);
+    if(!isValidObjectId(req.params.id)) {
+        res.set('Content-Type', 'text/plain');
+        return res.status(400).send(`No Record with given id : ${req.params.id}`);
+    }
 
     let query = { userId:req.params.id, isConsulted: true };
     Appointment.find(query, (err,doc)=>{
@@ -194,6 +215,7 @@ router.post('/appointment',(req,res)=>{
             prescription,
             treatment,
         });
+        
         newAppointment.save();
         
         return res.status(200).json({msg : 'Appointment has been Booked'});
