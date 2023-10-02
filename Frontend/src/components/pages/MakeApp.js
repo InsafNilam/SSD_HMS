@@ -48,7 +48,7 @@ export default function MakeApp(){
         Object.keys(values).forEach(k=>values[k] = typeof values[k]==='string'?values[k].trim():values[k]);
         setErrors(AppointmentValidate(values));
     }
-    
+
     useEffect(() => {
             if(Object.keys(errors).length===0 && values.name!=='' && values.address!=='' && values.email!=='' && values.date!=='Invalid date' && values.time!==''){
                 axios.post('http://localhost:4000/appointment',values).then(res=>{
@@ -103,7 +103,7 @@ export default function MakeApp(){
                         <label className='details' htmlFor='address'>Address</label>
                         <div className='input-group'>
                         <input type='text' autoComplete='off' id='address' value={values.address} name='address' ref={inputAddress} placeholder='Enter Your Address' onChange={handleChange}/>
-                        <i className='fa fa-address-card-o left-icon'/>
+                        <i className='fas fa-address-book left-icon'/>
                         <i className={!errors.address?'fa fa-times right-icon':'fa fa-exclamation right-icon'} onClick={()=>{
                             inputAddress.current.focus();
                             inputAddress.current.value='';

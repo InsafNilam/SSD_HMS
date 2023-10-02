@@ -179,7 +179,7 @@ export default function ManageBooking(){
                         <label className='details' htmlFor='userid'>Booking ID</label>
                         <div className='input-group'>
                         <input type='text' id='userid' disabled name='phoneNumber' value={singleAppointment._id} placeholder='Enter Your User ID' required/>
-                        <i className='fa fa-id-badge left-icon'/>
+                        <i className='fas fa-id-badge left-icon'/>
                         </div>
                     </div>
                     <div className='input-box'>
@@ -193,7 +193,7 @@ export default function ManageBooking(){
                         <label className='details' htmlFor='address'>Address</label>
                         <div className='input-group'>
                         <input type='text' id='address' disabled name='address' value={singleAppointment.address}  placeholder='Enter Your Address' required/>
-                        <i className='fa fa-address-card-o left-icon'/>
+                        <i className='fas fa-address-book left-icon'/>
                         </div>
                     </div>
                     <div className='input-box'>

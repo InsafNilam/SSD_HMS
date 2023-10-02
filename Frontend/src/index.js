@@ -2,10 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-ReactDOM.render(
+ReactDOM.hydrate(
   <React.StrictMode>
-    <App />
+    <HelmetProvider >
+      <App>
+        <Helmet>
+            <link rel="stylesheet" href="./App.css" />
+        </Helmet>
+      </App>
+    </HelmetProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

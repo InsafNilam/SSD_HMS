@@ -88,7 +88,7 @@ export default function BookingHistory() {
                         <label className='details' htmlFor='userid'>Booking ID</label>
                         <div className='input-group disabled'>
                         <input type='text' id='userid' name='phoneNumber' value = {singleAppointment._id} placeholder='Enter Your User ID' disabled/>
-                        <i className='fa fa-id-card-o left-icon'/>
+                        <i className='fas fa-id-batch left-icon'/>
                         </div>
                     </div>
                     <div className='input-box'>
@@ -102,7 +102,7 @@ export default function BookingHistory() {
                         <label className='details' htmlFor='address'>Address</label>
                         <div className='input-group disabled'>
                         <input type='text' id='address' name='address' value={singleAppointment.address} placeholder='Enter Your Address' disabled/>
-                        <i className='fa fa-address-card-o left-icon'/>
+                        <i className='fas fa-address-book left-icon'/>
                         </div>
                     </div>
                     <div className='input-box'>
