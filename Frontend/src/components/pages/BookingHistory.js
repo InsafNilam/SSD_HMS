@@ -71,7 +71,7 @@ export default function BookingHistory() {
                     setSingle(res.data[0])
             }).catch(err=>{console.log(err)})
         }
-    }, []);
+    }, [userId, userName, userRole]);
     
     if(userRole === 'doctor'){
         return(

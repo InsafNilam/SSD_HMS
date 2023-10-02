@@ -60,8 +60,7 @@ export default function GenerateReport() {
             setNoApp(res.data.length);
         }).catch(err=> console.log(err))
 
-    },[date]);
-    
+    },[])
     return (
         <>
         <Navbar/>

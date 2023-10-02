@@ -76,7 +76,7 @@ export default function LoginForm() {
             }
             );
         }
-    }, [errors, values])
+    }, [errors])
 
     return (
         <div className='body'>

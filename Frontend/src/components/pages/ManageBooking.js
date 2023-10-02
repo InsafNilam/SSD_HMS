@@ -17,7 +17,7 @@ export default function ManageBooking(){
     const userRole = sessionStorage.getItem('userRole');
     const userName = sessionStorage.getItem('userName');
 
-    const [selectedDate,setSelectedDate]= useState(new Date());
+    const [selectedDate,setSelectedDate] = useState(new Date());
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -85,9 +85,14 @@ export default function ManageBooking(){
                 setSingle(res.data);
                 setValue(appointments.filter((val)=>{
                     return (val._id===id)?
-                    (val.category=res.data.category,
-                    val.date=res.data.date,
-                    val.doctor=res.data.doctor):val
+                    (val.category = res.data.category,
+                    val.date = res.data.date,
+                    val.doctor = res.data.doctor,
+                    val.address = res.data.address,
+                    val.email = res.data.email,
+                    val.name = res.data.name,
+                    val.phone = res.data.phone,
+                    val.time = res.data.time):val
                 }))
                 toast.success("Appointment has been updated",{
                         position: "top-center",
@@ -122,6 +127,7 @@ export default function ManageBooking(){
     const setData=(id)=>{
         axios.get(`http://localhost:4000/appointment/${id}`).then(res=>{
             setValues(res.data)
+            handleEditOpen()
         }).catch(err=>{console.log(err)})
     }
     
@@ -349,9 +355,10 @@ export default function ManageBooking(){
                     <td>{val.date}</td>
                     <td className='action'>
                         <i className='fas fa-edit' onClick={()=>{
+                            setValues({name: val?.name, address: val?.address, category: val?.category, date: (val?.date), selectedDate: Date(val?.date), doctor: val?.doctor, email: val?.email, phone: val?.phone, time: val?.time,})
                             setId(val._id);
-                            setData(val._id)
                             handleEditOpen()
+                            // setData(val._id)
                         }}/>            
                         <i className='fas fa-trash-alt' onClick={()=>{
                             setId(val._id);
@@ -464,7 +471,10 @@ export default function ManageBooking(){
                             <label className='details' htmlFor='date'>Date</label>
                             <div className='date-group'>
                             <DatePicker required selected={selectedDate} 
-                            minDate={new Date()} placeholderText="Select a date" dateFormat='yyyy/MM/dd' autoComplete='off' id='date' onChange={(date)=>{values.date=moment(date).format('DD MMM YYYY'); setSelectedDate(date)}
+                                minDate={new Date()} placeholderText="Select a date" dateFormat='yyyy/MM/dd' autoComplete='off' id='date' onChange={ (date)=> {
+                                    setSelectedDate(date);
+                                    setValues({...values, date});
+                                }
                             }/>
                             </div>
                         </div>

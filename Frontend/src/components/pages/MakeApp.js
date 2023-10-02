@@ -48,7 +48,7 @@ export default function MakeApp(){
         Object.keys(values).forEach(k=>values[k] = typeof values[k]==='string'?values[k].trim():values[k]);
         setErrors(AppointmentValidate(values));
     }
-
+    
     useEffect(() => {
             if(Object.keys(errors).length===0 && values.name!=='' && values.address!=='' && values.email!=='' && values.date!=='Invalid date' && values.time!==''){
                 axios.post('http://localhost:4000/appointment',values).then(res=>{
@@ -76,7 +76,7 @@ export default function MakeApp(){
                     else console.log('Error', e.message)
                 });
             }
-        }, [errors, values])
+        }, [errors])
     return(
         <>
         <Navbar/>
