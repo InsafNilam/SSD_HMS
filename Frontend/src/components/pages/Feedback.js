@@ -25,7 +25,7 @@ export default function Feedback() {
             .then(res=>{
                 setValues(res.data)
             }).catch(err=>{console.log(err)})}
-    }, []);
+    }, [userId, userName, userRole]);
 
     return (
         <>

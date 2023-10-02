@@ -1,8 +1,10 @@
+var validator = require("email-validator");
+
 const LoginValidate = (values) => {
     let errors={}
     if(!values.email){
         errors.email="Email is Required"
-    }else if(!/^\w++(?:[-]?\w+)*+@\w++(?:[-]?\w+)*+(?:\.\w{2,3})++$/.test(values.email)){
+    }else if(!validator.validate(values.email)){
         errors.email="Email address invalid"
     }
 
@@ -26,7 +28,7 @@ const SignUpValidate=(values)=>{
 
     if(!values.email){
         errors.email="Email is Required"
-    }else if(!/^\w++(?:[-]?\w+)*+@\w++(?:[-]?\w+)*+(?:\.\w{2,3})++$/.test(values.email)){
+    }else if(!validator.validate(values.email)){
         errors.email="Email address invalid"
     }
 
@@ -50,7 +52,7 @@ const AppointmentValidate=(values)=>{
 
     if(!values.email){
         errors.email="Patient Email address is Required"
-    }else if(!/^\w++(?:[-]?\w+)*+@\w++(?:[-]?\w+)*+(?:\.\w{2,3})++$/.test(values.email)){
+    }else if(!validator.validate(values.email)){
         errors.email="Patient Email address invalid"
     }
 

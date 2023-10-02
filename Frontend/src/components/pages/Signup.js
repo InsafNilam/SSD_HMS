@@ -74,7 +74,7 @@ export default function SignUp(){
                     else console.log('Error', e.message)
             });
         }
-    }, [errors])
+    }, [errors, values])
 
     return(
         <div className='body'>

@@ -55,7 +55,7 @@ export default function TreatmentHistory() {
                     setSingle(res.data[0])
             }).catch(err=>{console.log(err)})
         }
-    }, []);
+    }, [userId, userName, userRole]);
 
     // For Doctor
     if(userRole === 'doctor'){

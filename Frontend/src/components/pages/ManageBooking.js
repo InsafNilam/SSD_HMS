@@ -60,13 +60,6 @@ export default function ManageBooking(){
 
     const [errors,setErrors]=useState({});
 
-    const handleSubmit= ()=>{
-        console.log(values.name)
-        // Make Sure there is no empty spaces trailing and leading
-        // Object.keys(values).map(k=>values[k]=values[k].trim());
-        setErrors(AppointmentValidate(values));
-    }
-
     const deleteData=(id)=>{
         axios.delete(`http://localhost:4000/appointment/${id}`).then(res=>{
             if(res.data!==null){

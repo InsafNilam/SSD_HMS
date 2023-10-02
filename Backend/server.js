@@ -6,7 +6,7 @@ const app = express();
 
 
 const corsOptions = {
-  origin: ['http://localhost:4000', 'http://localhost:5000'] // Sensitive
+  origin: ['http://localhost:3000'] // Sensitive
 };
 
 const connectDB = require('./src/Config/DB');

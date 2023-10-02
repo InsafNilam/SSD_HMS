@@ -14,10 +14,7 @@ router.post('/sign-up', async (req,res) => {
     
     // Check if user alredy exists with provided email
     let query = { email: email.toString() }
-    const user = await User.findOne(query, (err, doc) => { 
-        if(!err) res.send(doc);
-        else console.log('Error in Retrieving the User Details :' + JSON.stringify(err, undefined, 2));
-    })
+    const user = await User.findOne(query)
     
     if (user) {
         res.status(400).json({msg : 'User already exists'});
