@@ -10,9 +10,12 @@ const secret = 'secret123'
 router.post('/',(req, res)=>{
 
     const {email , password, type} = req.body;
-    let query = { email, type }
+    let query = { email: email?.toString(), type: type?.toString() }
 
-    const user = User.findOne(query)
+    const user = User.findOne(query, (err, doc) => {
+        if(!err) res.send(doc);
+        else console.log('Error in Retrieving the User Details :'+JSON.stringify(err,undefined,2));
+    });
 
     if (!user) {
         res.status(400).json({msg : 'User Does not exists'});

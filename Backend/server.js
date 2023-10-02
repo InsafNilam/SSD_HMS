@@ -19,6 +19,6 @@ app.use('/',authURLs);
 app.use('/',AppointmentURLs);
 
 app.listen('4000',(err)=>{
-    if(err) console.log("Error ocuured in starting the server:",err)
+    if(err) console.log("Error ocuured in starting the server:", err)
     console.log("Server is up and running")
 })
