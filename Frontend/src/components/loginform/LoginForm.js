@@ -32,7 +32,7 @@ export default function LoginForm() {
         event.preventDefault();
         
         // Make Sure there is no spaces trailing and leading
-        Object.keys(values).map(k=>values[k]=values[k].trim());
+        Object.keys(values).forEach(k=>values[k]=values[k].trim());
         // Validate input Fields
         setErrors(LoginValidate(values));
     }

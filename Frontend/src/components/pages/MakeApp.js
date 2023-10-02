@@ -45,7 +45,7 @@ export default function MakeApp(){
     const handleSubmit=(event)=>{
         event.preventDefault();
         // Make Sure there is no empty spaces trailing and leading
-        Object.keys(values).map(k=>values[k] = typeof values[k]==='string'?values[k].trim():values[k]);
+        Object.keys(values).forEach(k=>values[k] = typeof values[k]==='string'?values[k].trim():values[k]);
         setErrors(AppointmentValidate(values));
     }
     useEffect(() => {

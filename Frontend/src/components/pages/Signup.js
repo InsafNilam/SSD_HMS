@@ -33,7 +33,7 @@ export default function SignUp(){
     const handleSubmit=(event)=>{
         event.preventDefault();
         // Make Sure there is no spaces at the trailing and leading
-        Object.keys(values).map(k=>values[k]=values[k].trim());
+        Object.keys(values).forEach(k=>values[k]=values[k].trim());
         // Validate input Fields
         setErrors(SignUpValidate(values));
     }
