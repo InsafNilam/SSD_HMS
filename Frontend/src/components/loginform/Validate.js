@@ -1,4 +1,5 @@
-var validator = require("email-validator");
+const validator = require("email-validator");
+const pass_string = 'Password';
 
 const LoginValidate = (values) => {
     let errors={}
@@ -9,7 +10,7 @@ const LoginValidate = (values) => {
     }
 
     if(!values.password){
-        errors.password="UserPass is Required"
+        errors.password=`User ${pass_string} is Required`
     }
 
     return errors;
@@ -21,9 +22,9 @@ const SignUpValidate=(values)=>{
         errors.username="UserName is Required"
     }
     if(!values.password){
-        errors.password="UserPass is Required"
+        errors.password=`User ${pass_string} is Required`
     }else if(values.password.length < 6){
-        errors.password="Password needs to be atleast 6 characters in length"
+        errors.password=`${pass_string} needs to be atleast 6 characters in length`
     }
 
     if(!values.email){
@@ -33,9 +34,9 @@ const SignUpValidate=(values)=>{
     }
 
     if(!values.userconfirmpass){
-        errors.userconfirmpass="UserPass is Required"
+        errors.userconfirmpass=`User ${pass_string} is Required`
     }else if(values.userconfirmpass!==values.password){
-        errors.userconfirmpass="Password do not match"
+        errors.userconfirmpass=`${pass_string} do not match`
     }
 
     return errors;

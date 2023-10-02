@@ -4,10 +4,11 @@ import axios from 'axios';
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
-import moment from 'moment';
+// import moment from 'moment';
+// import {AppointmentValidate} from '../loginform/Validate';
+
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
-import {AppointmentValidate} from '../loginform/Validate';
 
 import { DialogActions, DialogContent ,Dialog, DialogTitle ,Grow ,useMediaQuery, useTheme ,Divider} from '@mui/material';
 
@@ -58,7 +59,7 @@ export default function ManageBooking(){
         })
     }
 
-    const [errors,setErrors]=useState({});
+    const [ errors ]=useState({});
 
     const deleteData=(id)=>{
         axios.delete(`http://localhost:4000/appointment/${id}`).then(res=>{
@@ -124,12 +125,12 @@ export default function ManageBooking(){
                         progress: undefined,
             })
     }
-    const setData=(id)=>{
-        axios.get(`http://localhost:4000/appointment/${id}`).then(res=>{
-            setValues(res.data)
-            handleEditOpen()
-        }).catch(err=>{console.log(err)})
-    }
+    // const setData=(id)=>{
+    //     axios.get(`http://localhost:4000/appointment/${id}`).then(res=>{
+    //         setValues(res.data)
+    //         handleEditOpen()
+    //     }).catch(err=>{console.log(err)})
+    // }
     
     const timeController=(id)=>{
         return values.time===id;
