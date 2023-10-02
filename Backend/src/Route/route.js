@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../Models/User');
 
 // Patient Sign Up
-router.post('/sign-up',async (req,res) => {
+router.post('/sign-up', async (req,res) => {
 
     const username= req.body.username;
     const email= req.body.email;
@@ -26,11 +26,13 @@ router.post('/sign-up',async (req,res) => {
     const saltPassword = await bcrypt.genSalt(10);
     const securePassword = await bcrypt.hash(password,saltPassword);
     
-    const newUser = await User.create({
+    const newUser = new User({
         username,
         email,
         password: securePassword,
     });
+
+    await newUser.save()
 
     if (newUser) {
         res.json({
