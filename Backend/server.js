@@ -2,6 +2,8 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
+const xss = require('xss-clean')
+const mongoSanitize = require('express-mongo-sanitize')
 
 const app = express();
 
@@ -19,6 +21,8 @@ connectDB();
 app.use(express.json());
 app.use(helmet());
 app.use(cors(corsOptions));
+app.use(mongoSanitize());
+app.use(xss());
 
 app.use('/',routerURLs);
 app.use('/',authURLs);

@@ -1,5 +1,4 @@
 const express =require('express');
-const dompurify = require('dompurify');
 const router= express.Router();
 const bcrypt =require('bcrypt')
 const jwt = require('jsonwebtoken'); 
@@ -8,7 +7,7 @@ const User = require('../Models/User');
 router.post('/', async (req, res)=>{
 
     const {email , password, type} = req.body;
-    let query = { email: dompurify.sanitize(email?.toString()), type: dompurify.sanitize(type?.toString()) }
+    let query = { email: email?.toString(), type: type?.toString() }
 
     const user = await User.findOne(query);
 
