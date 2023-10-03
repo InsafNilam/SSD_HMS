@@ -278,6 +278,8 @@ form .button,
   justify-content: center;
   align-items: center;
   height: 45px;
+  position: relative;
+  bottom: 10px;
 }
 .button.confirm {
   width: 100%;
@@ -311,6 +313,11 @@ form .button input[type="submit"],
 .button.confirm input[type="submit"],
 .preview input[type="submit"] {
   background: green;
+}
+
+.login .button input[type="submit"] {
+  position: relative;
+  bottom: 80px;
 }
 form .button input[type="reset"],
 .button.confirm input[type="reset"] {
