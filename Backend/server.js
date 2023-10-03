@@ -1,15 +1,11 @@
 const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
-// const csurf = require('csurf')
 
 const app = express();
-// const csrfProtection = csurf({
-//   cookie: true
-// });
 
 const corsOptions = {
-  origin: ['http://localhost:3000'] // Sensitive
+  origin: ['http://localhost:3000']
 };
 
 const connectDB = require('./src/Config/DB');
@@ -22,7 +18,6 @@ connectDB();
 app.use(express.json());
 app.use(helmet());
 app.use(cors(corsOptions));
-// app.use(csrfProtection);
 
 app.use('/',routerURLs);
 app.use('/',authURLs);

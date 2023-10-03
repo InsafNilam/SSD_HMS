@@ -4,9 +4,6 @@ import axios from 'axios';
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
-// import moment from 'moment';
-// import {AppointmentValidate} from '../loginform/Validate';
-
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -132,13 +129,7 @@ export default function ManageBooking(){
                         progress: undefined,
             })
     }
-    // const setData=(id)=>{
-    //     authAxios.get(`/appointment/${id}`).then(res=>{
-    //         setValues(res.data)
-    //         handleEditOpen()
-    //     }).catch(err=>{console.log(err)})
-    // }
-    
+
     const timeController=(id)=>{
         return values.time===id;
     }
@@ -366,7 +357,6 @@ export default function ManageBooking(){
                             setValues({name: val?.name, address: val?.address, category: val?.category, date: (val?.date), selectedDate: Date(val?.date), doctor: val?.doctor, email: val?.email, phone: val?.phone, time: val?.time,})
                             setId(val._id);
                             handleEditOpen()
-                            // setData(val._id)
                         }}/>            
                         <i className='fas fa-trash-alt' onClick={()=>{
                             setId(val._id);
