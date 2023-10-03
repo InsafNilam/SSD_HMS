@@ -3,25 +3,32 @@ import axios from 'axios'
 import Navbar from '../Navbar'
 
 export default function Feedback() {
+    const accessToken = sessionStorage.getItem("userToken");
     const userId = sessionStorage.getItem('userId');
     const userRole = sessionStorage.getItem('userRole');
     const userName = sessionStorage.getItem('userName');
 
     const [appointments,setValues]= useState([])
 
+     const authAxios = axios.create({
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+
     useEffect(() => {
         if(userRole === 'admin'){
-            axios.get('http://localhost:4000/feed-appointment')
+            authAxios.get('/feed-appointment')
             .then(res=>{
                 setValues(res.data)
             }).catch(err=>{console.log(err)})
         }else if(userRole === 'doctor'){
-            axios.get(`http://localhost:4000/doctor-treatment/${userName}`)
+            authAxios.get(`/doctor-treatment/${userName}`)
             .then(res=>{
                 setValues(res.data)
             }).catch(err=>{console.log(err)})
         }else{
-            axios.get(`http://localhost:4000/user-treatment/${userId}`)
+            authAxios.get(`/user-treatment/${userId}`)
             .then(res=>{
                 setValues(res.data)
             }).catch(err=>{console.log(err)})}

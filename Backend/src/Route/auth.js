@@ -13,11 +13,11 @@ router.post('/', async (req, res)=>{
     const user = await User.findOne(query);
 
     if (!user) {
-        res.status(400).json({msg : 'User Does not exists'});
+        return res.status(400).json({msg : 'User Does not exists'});
     }
 
     if (user && (await bcrypt.compare(password, user.password))) {
-        res.json({
+        return res.json({
             token: generateToken(user._id),
             id: user._id,
             name: user.username,
@@ -25,14 +25,14 @@ router.post('/', async (req, res)=>{
             type: user.type
         })
     }else{
-        res.status(400).json({ msg : 'Invalid Credentials'});
+        return res.status(400).json({ msg : 'Invalid Credentials'});
     }
 })
 
 const generateToken = (id) => {
-return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '1h',
-})
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '1h',
+    })
 }
 
 module.exports = router;

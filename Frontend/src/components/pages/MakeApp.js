@@ -13,6 +13,7 @@ import {AppointmentValidate} from '../loginform/Validate';
 
 export default function MakeApp(){
     toast.configure();
+    const accessToken = sessionStorage.getItem("userToken");
     const [selectedDate,setSelectedDate]= useState(new Date());
     const [values,setValues]=useState({
         userId:sessionStorage.getItem('userId'),
@@ -49,9 +50,15 @@ export default function MakeApp(){
         setErrors(AppointmentValidate(values));
     }
 
+     const authAxios = axios.create({
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+
     useEffect(() => {
             if(Object.keys(errors).length===0 && values.name!=='' && values.address!=='' && values.email!=='' && values.date!=='Invalid date' && values.time!==''){
-                axios.post('http://localhost:4000/appointment',values).then(res=>{
+                authAxios.post('/appointment',values).then(res=>{
                         toast.success(res.data.msg,{
                             position: "top-center",
                             autoClose: 1000,

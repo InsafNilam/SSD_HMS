@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import Navbar from '../Navbar'
 
 export default function BookingHistory() {
+    const accessToken = sessionStorage.getItem("userToken");
     const userId = sessionStorage.getItem('userId');
     const userRole = sessionStorage.getItem('userRole');
     const userName = sessionStorage.getItem('userName');
@@ -23,8 +24,14 @@ export default function BookingHistory() {
     const [appointments,setValues]= useState([])
     const [singleAppointment,setSingle]= useState({})
 
+     const authAxios = axios.create({
+        headers: {
+        Authorization: `Bearer ${accessToken}`,
+        },
+    });
+
     const EditData =(id)=>{
-        axios.put(`http://localhost:4000/doctor-prescription/${id}`,{prescription : presc, treatment: treat}).then(res=>{
+        authAxios.put(`/doctor-prescription/${id}`, {prescription : presc, treatment: treat} ).then(res=>{
             if(res.data!==null){
                 setValues(appointments.filter((val)=>{
                     return val._id !== id;
@@ -44,7 +51,7 @@ export default function BookingHistory() {
 
     useEffect(() => {
         if(userRole === 'admin'){
-            axios.get('http://localhost:4000/appointment').then(res=>{
+            authAxios.get('/appointment').then(res=>{
                 setValues(res.data)
                 if(Object.keys(res.data).length === 0)
                 setSingle(res.data)
@@ -52,7 +59,7 @@ export default function BookingHistory() {
                 setSingle(res.data[0])
             }).catch(err=>{console.log(err)})
         }else if(userRole === 'doctor'){
-            axios.get(`http://localhost:4000/appointment/${userName}`)
+            authAxios.get(`/appointment/${userName}`)
             .then(res =>{
                 setValues(res.data)
                 if(Object.keys(res.data).length === 0)
@@ -62,7 +69,7 @@ export default function BookingHistory() {
             }).catch(err=>{console.log(err)})
         }
         else{
-            axios.get(`http://localhost:4000/user-appointment/${userId}`)
+            authAxios.get(`/user-appointment/${userId}`)
             .then(res=>{
                 setValues(res.data)
                 if(Object.keys(res.data).length === 0)

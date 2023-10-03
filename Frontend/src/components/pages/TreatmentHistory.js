@@ -7,6 +7,7 @@ import Navbar from '../Navbar'
 
 export default function TreatmentHistory() {
     toast.configure();
+    const accessToken = sessionStorage.getItem("userToken");
     const userId = sessionStorage.getItem('userId');
     const userRole = sessionStorage.getItem('userRole');
     const userName = sessionStorage.getItem('userName');
@@ -21,8 +22,14 @@ export default function TreatmentHistory() {
     const handleEditOpen=()=> setIsEdit(true)
     const handleEditClose=()=> setIsEdit(false)
 
+     const authAxios = axios.create({
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+
     const EditData =(id)=>{
-        axios.put(`http://localhost:4000/app-feedback/${id}`,{feed : feed}).then(res=>{
+        authAxios.put(`/app-feedback/${id}`,{feed : feed}).then(res=>{
             toast.success("Feedback has been Provided",{
                         position: "top-center",
                         autoClose: 2000,
@@ -37,7 +44,7 @@ export default function TreatmentHistory() {
 
     useEffect(() => {
         if(userRole === 'doctor'){
-            axios.get(`http://localhost:4000/doctor-treatment/${userName}`)
+            authAxios.get(`/doctor-treatment/${userName}`)
             .then(res =>{
                 setValues(res.data)
                 if(Object.keys(res.data).length === 0)
@@ -46,7 +53,7 @@ export default function TreatmentHistory() {
                     setSingle(res.data[0])
             }).catch(err=>{console.log(err)})
         }else{
-            axios.get(`http://localhost:4000/user-treatment/${userId}`)
+            authAxios.get(`/user-treatment/${userId}`)
             .then(res=>{
                 setValues(res.data)
                 if(Object.keys(res.data).length === 0)

@@ -17,6 +17,7 @@ export default function ManageBooking(){
     const userId = sessionStorage.getItem('userId');
     const userRole = sessionStorage.getItem('userRole');
     const userName = sessionStorage.getItem('userName');
+    const accessToken = sessionStorage.getItem("userToken");
 
     const [selectedDate,setSelectedDate] = useState(new Date());
     const theme = useTheme();
@@ -61,8 +62,14 @@ export default function ManageBooking(){
 
     const [ errors ]=useState({});
 
+     const authAxios = axios.create({
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+
     const deleteData=(id)=>{
-        axios.delete(`http://localhost:4000/appointment/${id}`).then(res=>{
+        authAxios.delete(`/appointment/${id}`).then(res=>{
             if(res.data!==null){
                 setValue(appointments.filter((val)=>{
                     return val._id !== id;
@@ -82,7 +89,7 @@ export default function ManageBooking(){
 
     const updateData=(id)=>{
         if(values.name!=='' && values.address!=='' && values.email!=='' && values.date!=='Invalid date' && values.time!==''){
-            axios.put(`http://localhost:4000/appointment/${id}`,values).then(res=>{
+            authAxios.put(`/appointment/${id}`,values).then(res=>{
                 setSingle(res.data);
                 setValue(appointments.filter((val)=>{
                     return (val._id===id)?
@@ -126,7 +133,7 @@ export default function ManageBooking(){
             })
     }
     // const setData=(id)=>{
-    //     axios.get(`http://localhost:4000/appointment/${id}`).then(res=>{
+    //     authAxios.get(`/appointment/${id}`).then(res=>{
     //         setValues(res.data)
     //         handleEditOpen()
     //     }).catch(err=>{console.log(err)})
@@ -144,7 +151,7 @@ export default function ManageBooking(){
 
     useEffect(() => {
         if(userRole === 'doctor'){
-            axios.get(`http://localhost:4000/appointment/${userName}`)
+            authAxios.get(`/appointment/${userName}`)
             .then(res =>{
                 setValue(res.data)
                 if(Object.keys(res.data).length === 0)
@@ -153,7 +160,7 @@ export default function ManageBooking(){
                     setSingle(res.data[0])
             }).catch(err=>{console.log(err)})
         }else{
-            axios.get(`http://localhost:4000/user-appointment/${userId}`)
+            authAxios.get(`/user-appointment/${userId}`)
             .then(res=>{
                 setValue(res.data)
                 if(Object.keys(res.data).length === 0)

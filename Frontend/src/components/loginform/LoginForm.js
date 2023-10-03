@@ -40,11 +40,12 @@ export default function LoginForm() {
 
     useEffect(() => {
         if(Object.keys(errors).length===0  && values.email!=='' && values.password!==''){
-            axios.post('http://localhost:4000/',values).then((res)=>{
-                let token = res.data.token;
+            axios.post('/',values).then((res)=>{
                 let userId = res.data.id;
                 let userRole = res.data.type;
                 let userName = res.data.name;
+                let userToken = res.data.token;
+
                 toast.success("Login was Successful",{
                         position: "top-center",
                         autoClose: 1000,
@@ -54,11 +55,12 @@ export default function LoginForm() {
                         draggable: false,
                         progress: undefined,
                         })
-                if(token!== null) {
+                if(userToken!== null) {
                     sessionStorage.setItem('isAuth',"true");
                     sessionStorage.setItem('userId',userId);
                     sessionStorage.setItem('userRole',userRole);
                     sessionStorage.setItem('userName',userName);
+                    sessionStorage.setItem("userToken", userToken);
                     setInterval(()=> window.location.pathname = "/home",1000)
                 }
             }).catch(e => {

@@ -1,19 +1,36 @@
-const jwt = require('jsonwebtoken');
-const secret = 'secret123';
+const jwt = require('jsonwebtoken')
+const asyncHandler = require('express-async-handler')
+const User = require('../Models/User')
 
-function auth (req,res,next){
-    const token = req.header('x-auth-token');
+const protect = asyncHandler(async (req, res, next) => {
+  
+  let token
 
-    // Check For Token
-    if(!token) res.status(401).json({msg:'No Token, authorization denied'});
-    try{
-        const decoded = jwt.verify(token,secret);
-        // Add user From Payload
-        req.user = decoded;
-        next();
-    }catch(e){
-        res.status(400).json({msg:'Token is not Valid'});
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      // Get token from header
+        token = req.headers.authorization.split(' ')[1]
+        // Verify token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        console.log(decoded);
+
+        // Get user from the token
+        req.user = await User.findById(decoded.id).select('-password')
+        next()
+    } catch (error) {
+        console.log(error)
+        res.status(401)
+        throw new Error('Not authorized')
     }
-}
+  }
 
-module.exports = auth;
+  if (!token) {
+    res.status(401)
+    throw new Error('Not authorized, no token')
+  }
+})
+
+module.exports = { protect }

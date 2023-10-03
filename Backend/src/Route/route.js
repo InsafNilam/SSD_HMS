@@ -17,7 +17,7 @@ router.post('/sign-up', async (req,res) => {
     const user = await User.findOne(query)
     
     if (user) {
-        res.status(400).json({msg : 'User already exists'});
+        return res.status(400).json({msg : 'User already exists'});
     }
 
     const saltPassword = await bcrypt.genSalt(10);
@@ -32,14 +32,14 @@ router.post('/sign-up', async (req,res) => {
     await newUser.save()
 
     if (newUser) {
-        res.json({
+        return res.json({
             token: generateToken(newUser._id),
             id: newUser._id,
             name: newUser.username,
             email: newUser.email
         })
     }else{
-        res.status(400).json({msg: 'Invalid user! please check again'})
+        return res.status(400).json({msg: 'Invalid user! please check again'})
     }
 })
 

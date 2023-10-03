@@ -7,7 +7,7 @@ import {Pie} from 'react-chartjs-2'
 import { DialogActions, DialogContent ,Dialog, DialogTitle ,Grow ,useMediaQuery, useTheme ,Divider} from '@mui/material';
 
 export default function GenerateReport() {
-
+    const accessToken = sessionStorage.getItem("userToken");
     const date = moment(new Date()).format('DD MMM YYYY')
     const [active,setActive] = useState(0);
     const [notActive,setNotActive] = useState(0);
@@ -20,6 +20,12 @@ export default function GenerateReport() {
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('lg'));
+
+     const authAxios = axios.create({
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
 
     // Pie Chart Data
     const state = {
@@ -42,25 +48,27 @@ export default function GenerateReport() {
             }
         ]
     }
+
+
     useEffect(()=>{
         // Get Consulted records today
-        axios.get(`http://localhost:4000/report-not/${date}`).then(res=>{
+        authAxios.get(`/report-not/${date}`).then(res=>{
             setActive(res.data.length);
         }).catch(err=> console.log(err))
         // Get Not Consulted Records today
-        axios.get(`http://localhost:4000/report/${date}`).then(res=>{
+        authAxios.get(`/report/${date}`).then(res=>{
             setNotActive(res.data.length);
         }).catch(err=> console.log(err))
         // Get Feedbacks up to now
-        axios.get('http://localhost:4000/feed-appointment/').then(res=>{
+        authAxios.get('/feed-appointment/').then(res=>{
             setNoFeeds(res.data.length);
         }).catch(err=> console.log(err))
         // Get Appointments up to now
-        axios.get('http://localhost:4000/appointment/').then(res=>{
+        authAxios.get('/appointment/').then(res=>{
             setNoApp(res.data.length);
         }).catch(err=> console.log(err))
-
     },[])
+
     return (
         <>
         <Navbar/>
