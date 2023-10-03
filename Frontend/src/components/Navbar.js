@@ -3,7 +3,6 @@ import { Button } from "./Button";
 import { Link } from "react-router-dom";
 import Dropdown from "./Dropdown";
 import "./Navbar.css";
-import { GoogleLogout } from "react-google-login";
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 
@@ -30,20 +29,7 @@ function Navbar() {
     setMobile(!mobile);
   };
 
-  const onSuccess = () => {
-    alert("Logout made successfully");
-    sessionStorage.setItem("isAuth", "false");
-    closeMobileMenu();
-    sessionStorage.clear();
-    window.location.pathname = "/";
-  };
-
   const handleLogout = () => {
-    <GoogleLogout
-      clientId={clientId}
-      buttonText="Logout"
-      onLogoutSuccess={onSuccess}
-    />;
     closeMobileMenu();
     sessionStorage.clear();
     window.location.pathname = "/";
