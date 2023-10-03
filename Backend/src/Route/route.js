@@ -7,11 +7,8 @@ const User = require('../Models/User');
 // Patient Sign Up
 router.post('/sign-up', async (req,res) => {
 
-    const username= req.body.username;
-    const email= req.body.email;
-    const password = req.body.password;
+    const { username, email, password } = req.body;
 
-    
     // Check if user alredy exists with provided email
     let query = { email: email.toString() }
     const user = await User.findOne(query)
@@ -21,11 +18,11 @@ router.post('/sign-up', async (req,res) => {
     }
 
     const saltPassword = await bcrypt.genSalt(10);
-    const securePassword = await bcrypt.hash(password,saltPassword);
+    const securePassword = await bcrypt.hash(password, saltPassword);
     
     const newUser = new User({
-        username,
-        email,
+        username: username?.toString(),
+        email: email?.toString,
         password: securePassword,
     });
 

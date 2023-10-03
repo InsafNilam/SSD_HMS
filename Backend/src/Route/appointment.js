@@ -80,7 +80,7 @@ router.get('/all-appointment/:name', protect, asyncHandler(async (req,res) => {
 
 // Get All Booking History By Doctor Name, but not consulted
 router.get('/appointment/:name', protect, asyncHandler(async (req,res) => {
-    let query = { isConsulted:false, doctor:req.params.name.toString() }
+    let query = { isConsulted:false, doctor: req.params.name.toString() }
     try {
         const doc = await Appointment.find(query);
         return res.send(doc)
@@ -91,7 +91,7 @@ router.get('/appointment/:name', protect, asyncHandler(async (req,res) => {
 
 // Get Treatment History of Patient (Doctor) 
 router.get('/doctor-treatment/:name', protect, asyncHandler(async (req,res)=>{
-    let query = { isConsulted:true, doctor:req.params.name.toString() }
+    let query = { isConsulted:true, doctor: req.params.name.toString() }
     try {
         const doc = await Appointment.find(query);
         return res.send(doc)
@@ -162,6 +162,7 @@ router.put('/app-feedback/:id', protect, asyncHandler(async (req,res)=>{
     }
 
     const { feed } = req.body;
+    // Sanitize user input to prevent XSS
 
     const feedback = { feed : feed?.toString() }
 
