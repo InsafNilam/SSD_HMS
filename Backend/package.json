@@ -12,6 +12,7 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
+    "dompurify": "^3.0.6",
     "dotenv": "^16.3.1",
     "express": "^4.17.1",
     "express-async-handler": "^1.2.0",
